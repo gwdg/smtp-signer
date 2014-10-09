@@ -1,0 +1,18 @@
+# Copy test.rc.sample to test.rc and setup variables
+# Then, 
+#
+#   . ./test.rc
+#
+# And run other tests.
+#
+
+T_HOST="FQDN"
+T_USER="USER"
+T_PASS="PASS"
+T_FROM="GivenName Surname <FROM-EMAIL>"
+T_TO="GivenName Surname <TO-EMAIL>"
+
+export T_HOST T_USER T_PASS T_FROM T_TO
+
+
+
