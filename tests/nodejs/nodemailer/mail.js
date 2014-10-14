@@ -1,5 +1,6 @@
+#!/usr/bin/env node
+
 var nodemailer = require('nodemailer')
-// var smtpTransport = require('nodemailer-smtp-transport');
 
 var T_HOST = process.env.T_HOST
 var T_USER = process.env.T_USER
@@ -20,7 +21,7 @@ var transporter = nodemailer.createTransport( options ); // smptTransport(option
 transporter.sendMail({
   from: T_FROM,
   to:   T_TO,
-  subject: "smtp-signer test mail | NodeJS (mail.js)",
+  subject: "smtp-signer test mail | NodeJS (nodemailer/mail.js) ",
   text: "This test mail should have been signed.\n"
 });
 

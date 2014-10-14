@@ -21,4 +21,18 @@ Edit 'sign.pl' configuration variables.
 * Run `scripts/convert.sh <email>'
 * Copy `<email>_all.pem`, `<email>_key.pem` and `<email>_cert.pem` files to `certs` folder.
 
+## Tests
+
+The tests folder contains 'send mail' test scripts in various languages/SMTP APIs.
+
+* `cd tests`
+* `cp test.rc.sample test.rc`
+* Edit test.rc
+* Run tests
+ * Perl: `./mail.pl`
+ * Python: `./mail.py`
+ * NodeJS
+  * `cd nodejs/nodemailer`
+  * `npm update` (once)
+  * `node ./mail.js`
 
