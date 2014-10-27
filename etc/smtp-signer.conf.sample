@@ -1,0 +1,5 @@
+SIGN_DIR=/var/spool/sign
+CERT_DIR=${TOP}/certs
+SENDMAIL="/usr/sbin/sendmail -G -i"
+OPENSSL="/usr/sbin/openssl"
+PASSWORD="some-secret"
