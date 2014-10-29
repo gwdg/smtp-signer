@@ -1,0 +1,15 @@
+#!/bin/sh
+PREFIX=`dirname $0`/..
+. "${PREFIX}/etc/common.sh"
+
+if [ $# -ne 1 ]; then
+  cat 2>&1 <<EOF
+usage: $0 <ip-address>
+EOF
+exit 1
+fi
+
+printf "%s\n" "$1" >>"${PREFIX}/etc/pf-smtp-clients.conf"
+
+pf_reload
+

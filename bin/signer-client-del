@@ -1,0 +1,18 @@
+#!/bin/sh
+PREFIX=`dirname $0`/..
+. "${PREFIX}/etc/common.sh"
+
+if [ $# -ne 1 ]; then
+  cat 2>&1 <<EOF
+usage: $0 <ip-address>
+
+remove smtp-client's <ip-address>
+EOF
+exit 1
+fi
+
+cat "${PREFIX}/etc/pf-smtp-clients.conf" | sed "/$1/d" >/tmp/pf-smtp-clients.conf.new
+mv /tmp/pf-smtp-clients.conf.new "${PREFIX}/etc/pf-smtp-clients.conf"
+
+pf_reload
+

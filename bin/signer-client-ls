@@ -1,0 +1,4 @@
+#!/bin/sh
+PREFIX=`dirname $0`/..
+cat ${PREFIX}/etc/pf-smtp-clients.conf
+

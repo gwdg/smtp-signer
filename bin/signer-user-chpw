@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [ $# -ne 2 ]; then
+  cat <<EOF
+usage: $0 <username> <newpassword>
+EOF
+  exit 1
+fi
+USERNAME=$1
+PASSWORD=$2
+usermod -p `encrypt "${PASSWORD}"` "${USERNAME}"
+

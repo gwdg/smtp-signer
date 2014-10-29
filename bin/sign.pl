@@ -5,11 +5,13 @@ use Crypt::SMIME;
 use Email::MIME;
 use Log::Log4perl qw(:easy);
 
+exit 0;
+
 #Paths
 my $sign_dir="/var/spool/sign";
-my $cert_dir="/opt/smtp-signer/certs";
+my $cert_dir="/usr/local/src/smtp-signer/certs";
 my $sendmail="/usr/sbin/sendmail -G -i";
-my $openssl="/usr/bin/openssl";
+my $openssl="/usr/sbin/openssl";
 
 #Error exit codes
 my $E_TEMPFAIL=75;
@@ -18,7 +20,7 @@ my $E_NOMAILADDRESS=71;
 my $E_MISSINGPARAMETERS=89;
 
 #Setup logging service
-my $log_config = "/opt/smtp-proxy/bin/log4perl.conf";
+my $log_config = "/usr/local/src/smtp-signer/etc/log4perl.conf";
 Log::Log4perl->init($log_config);
 my $logger =  Log::Log4perl->get_logger();
 

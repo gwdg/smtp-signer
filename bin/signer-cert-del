@@ -1,0 +1,19 @@
+#!/bin/sh
+PREFIX=`dirname $0`/..
+. "${PREFIX}/etc/common.sh"
+
+if [ $# -ne 1 ]; then
+  cat <<EOF
+usage: $0 <email>
+
+EOF
+  exit 1
+fi
+
+NAME=$1
+
+OUT_KEY="${PREFIX}/certs/${NAME}_key.pem"
+OUT_ALL="${PREFIX}/certs/${NAME}_all.pem"
+
+rm ${OUT_KEY} ${OUT_ALL}
+

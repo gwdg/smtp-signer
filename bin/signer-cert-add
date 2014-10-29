@@ -1,0 +1,42 @@
+#!/bin/sh
+PREFIX=`dirname $0`/..
+. "${PREFIX}/etc/common.sh"
+
+if [ $# -ne 2 ]; then
+  cat <<EOF
+usage: $0 <key.pem> <cert.pem>
+
+Keyfile should have no password set.
+EOF
+  exit 1
+fi
+
+IN_KEY=$1
+IN_CERT=$2
+
+if [ ! -f ${IN_KEY} ]; then
+  printf "missing key file '${IN_KEY}'.\n"
+  exit 1
+fi
+
+if [ ! -f ${IN_CERT} ]; then
+  printf "missing certificate file '${IN_CERT}'.\n"
+  exit 1
+fi
+
+OUT_P12=/tmp/$$.p12
+openssl pkcs12 -export -inkey "${IN_KEY}" -in "${IN_CERT}" -out "${OUT_P12}" -passout "pass:${PASSWORD}"
+
+MAIL_ADDRESSES=`openssl x509 -in "${IN_CERT}" -email -noout`
+
+for NAME in "${MAIL_ADDRESSES}"
+do
+  OUT_KEY="${PREFIX}/certs/${NAME}_key.pem"
+  OUT_ALL="${PREFIX}/certs/${NAME}_all.pem"
+  printf "generate ${OUT_KEY} and ${OUT_ALL}\n"
+  openssl pkcs12 -in "${OUT_P12}" -passin "pass:${PASSWORD}" -passout "pass:${PASSWORD}" -nocerts -out "${OUT_KEY}"
+  openssl pkcs12 -in "${OUT_P12}" -passin "pass:${PASSWORD}" -passout "pass:${PASSWORD}"          -out "${OUT_ALL}"
+done
+
+rm "${OUT_P12}"
+

@@ -12,6 +12,8 @@ sign      unix  -       n       n       -       10      pipe
   argv=/opt/smtp-signer/bin/sign.pl -f ${sender} -- ${recipient}
 ```
 
+Edit '$PREFIX/etc/smtp-signer.conf', specify PASSWORD (and do not change later!).'
+
 Edit 'sign.pl' configuration variables.
 
 ## Installation of certificates and keys.

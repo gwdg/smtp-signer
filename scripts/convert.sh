@@ -1,9 +1,13 @@
 #!/bin/sh
 
 if [ $# -ne 1 ]; then
-  printf "SMTP-Signer convert tool for cert/key files\n\n"
-  printf "usage: $0 <mail-address>\n\n"
-  printf "Required input files: '<email-address>_cert.pem' and '<email-addres>_key-plain.pem'.\n"
+  cat <<EOF
+SMTP-Signer convert tool for cert/key files
+
+usage: $0 <mail-address>
+
+Required input files: '<email-address>_cert.pem' and '<email-addres>_key-plain.pem'
+EOF
 fi
 
 NAME=$1
