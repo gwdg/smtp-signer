@@ -30,9 +30,8 @@ smtp      inet  n       -       -       -       -       smtpd
 ```
 sign      unix  -       n       n       -       10      pipe
   flags=Rq user=mail null_sender=
-  argv=/usr/smtp-signer/bin/sign.sh -f ${sender} -- ${recipient}
+  argv=<PREFIX>/bin/sign.sh -f ${sender} -- ${recipient}
 ```
-   
   * Edit 'etc/smtp-signer.conf', specify PASSWORD (and do not change later!).'
 
  * Perl:
@@ -40,14 +39,13 @@ sign      unix  -       n       n       -       10      pipe
 ```
 sign      unix  -       n       n       -       10      pipe
   flags=Rq user=mail null_sender=
-  argv=/opt/smtp-signer/bin/perl.sh -f ${sender} -- ${recipient}
+  argv=<PREFIX>/bin/sign.pl -f ${sender} -- ${recipient}
 ```
-
   * Edit 'sign.pl' configuration variables.
 
 ## Administration
 
-A couple of administration tasks are abstracted via thin shell command-line tool wrappers using the prefix `signer-<SUBJECT>-<ACTION>`
+A couple of administration tasks are abstracted via thin shell command-line tool wrappers with the filename pattern `signer-<SUBJECT>-<ACTION>`
 (e.g. `user`, `cert` and `client` as subjects, and `add`, `del` as action.)
 
 ### Prequisite
@@ -59,6 +57,8 @@ Run tools as root e.g. via `sudo signer-...`.
 ### Add user
 
 `signer-user-add <user> <password>`
+
+This will add a new user to the system (with shell/login disabled).
 
 ### Add client
 
@@ -116,4 +116,12 @@ Further testing tools:
 
 * Test tool for a self-signed X.509 email certificate 
   `tests/gen-test-cert.sh <email>`
+
+```
+cd <PREFIX>
+. ./setenv
+cd tests
+./gen-test-cert.sh foo@bar.com
+sudo signer-cert-add foo@bar.com_key.pem foo@bar.com_cert.pem
+```
 
