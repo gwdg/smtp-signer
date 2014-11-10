@@ -2,16 +2,26 @@
 use strict;
 use warnings;
 use Crypt::SMIME;
-use Email::MIME;
 use Log::Log4perl qw(:easy);
+use Config::IniFiles;
 
-exit 0;
+use Cwd 'abs_path';
+use File::Basename;
+
+my $wd = dirname(abs_path($0));
+chdir($wd);
+
+#Initialize config file
+my %config;
+
+tie %config, 'Config::IniFiles', ( -file => "../etc/smtp-signer.ini" );
+
 
 #Paths
-my $sign_dir="/var/spool/sign";
-my $cert_dir="/usr/local/src/smtp-signer/certs";
-my $sendmail="/usr/sbin/sendmail -G -i";
-my $openssl="/usr/sbin/openssl";
+my $sign_dir=$config{pathes}{SIGN_DIR};
+my $cert_dir=$config{pathes}{CERT_DIR};
+my $sendmail=$config{pathes}{SENDMAIL};
+my $openssl =$config{pathes}{PASSWORD};
 
 #Error exit codes
 my $E_TEMPFAIL=75;
@@ -20,7 +30,7 @@ my $E_NOMAILADDRESS=71;
 my $E_MISSINGPARAMETERS=89;
 
 #Setup logging service
-my $log_config = "/usr/local/src/smtp-signer/etc/log4perl.conf";
+my $log_config = $config{pathes}{LOG_CONFIG};
 Log::Log4perl->init($log_config);
 my $logger =  Log::Log4perl->get_logger();
 
@@ -32,7 +42,6 @@ if( ! -d $sign_dir ) {
 
 
 my @input=<STDIN>;
-my $parsed = Email::MIME->new(join("",@input));
 my $from = "";
 my $to = "";
 $logger->info("Number of parameters:" . scalar(@ARGV));
@@ -77,19 +86,22 @@ else
 	$keycerterror = 3;
 }
 
+my $output="";
 if(!$keycerterror) {
 	my $smime = Crypt::SMIME->new();
 	$smime->setPrivateKey($key,$cert,$password);
 	my $signed = $smime->sign(join("",@input));
-	$logger->info($signed);
-	open(PIPE,"|$sendmail -f $from -- $to");
-	print PIPE ($signed);
-	close(PIPE);
+	$logger->info("Forwarding signed mail from $from to $to with $sendmail");
+        $output = $signed;
 }
 else {
-	$logger->error("Error $keycerterror with certificates\n$cert_file\n$key_file\n");
+	$logger->error("No certificate found for $from. Sending unsigned.");
+        $output = join("",@input); 
 }
 
+open(PIPE,"|$sendmail -f $from -- $to");
+print PIPE ($output);
+close(PIPE);
 
 
 
