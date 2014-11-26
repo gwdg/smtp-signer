@@ -1,4 +1,7 @@
 #!/bin/sh
+# SMTP Signer - POSIX Shell Implementation (using sed)
+#
+
 PREFIX=`dirname $0`/..
 . "${PREFIX}/etc/smtp-signer.conf"
 
@@ -28,10 +31,13 @@ printf "\n" >>body.$$
 sed '1,/^$/ d' <in.$$ >>body.$$
 CERT_FILE="${CERT_DIR}/$2_all.pem"
 if [ -f "${CERT_FILE}" ]; then
-  ${OPENSSL} smime -sign -signer "${CERT_FILE}" -passin "pass:${PASSWORD}" -in body.$$ -out signed.$$ 
+  # Sign mail and relay
+  MSG="Signed mail from $2"
+  ${OPENSSL} smime -sign -signer "${CERT_FILE}" -passin "pass:${PASSWORD}" -in body.$$ -out signed.$$
   cat header.$$ signed.$$ | ${SENDMAIL} "$@" 
 else
-  # relay without signing
+  # Relay without signing
+  MSG="Unsigned mail from $2"
   cat in.$$ | ${SENDMAIL} "$@"
 fi
 #else 
@@ -43,6 +49,14 @@ fi
 #Failed to sign.
 #EOF
 #fi
+STATUS=$?
 
-exit $?
+if [ "${STATUS}" -eq 0 ]; then
+  LOG_LEVEL="notice"
+else
+  LOG_LEVEL="err"
+fi
+logger -p "mail.${LOG_LEVEL}" -t "sign.sh" "${MSG}"
+
+exit ${STATUS}
 
