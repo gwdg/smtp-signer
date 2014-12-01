@@ -44,7 +44,7 @@ if( ! -d $sign_dir ) {
 my @input=<STDIN>;
 my $from = "";
 my $to = "";
-$logger->info("Number of parameters:" . scalar(@ARGV));
+$logger->info("Parameters: @ARGV");
 if(scalar(@ARGV) >3) {
 	$from = $ARGV[1];
 	$to = $ARGV[3];
@@ -52,6 +52,7 @@ if(scalar(@ARGV) >3) {
 else{
 	exit($E_MISSINGPARAMETERS);
 }
+
 #if($from !~ m/^.+@.+\..+}$/) {
 #	exit($E_NOMAILADDRESS);
 #	
@@ -99,9 +100,11 @@ else {
         $output = join("",@input); 
 }
 
-open(PIPE,"|$sendmail -f $from -- $to");
+#open(PIPE,"|$sendmail -f $from -- $to");
+open(PIPE,"|$sendmail @ARGV");
 print PIPE ($output);
 close(PIPE);
+
 
 
 
