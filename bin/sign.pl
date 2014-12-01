@@ -3,25 +3,44 @@ use strict;
 use warnings;
 use Crypt::SMIME;
 use Log::Log4perl qw(:easy);
-use Config::IniFiles;
-
 use Cwd 'abs_path';
 use File::Basename;
+
+
+sub readConfig {
+	my $filename = shift;
+	my %result = ();
+	if(open(CONFFILE,"<$filename")) {
+		while(<CONFFILE>) {
+			my $line = $_;
+			chomp($line);
+			my ($key,$value)=split(/=/,$line);
+			$value =~ s/"//g;
+			$result{$key} = $value;
+		}
+		return %result;
+	}
+	else {
+		return undef;	
+	}
+}
 
 my $wd = dirname(abs_path($0));
 chdir($wd);
 
 #Initialize config file
-my %config;
+my %config = readConfig("../etc/smtp-signer.conf");
 
-tie %config, 'Config::IniFiles', ( -file => "../etc/smtp-signer.ini" );
-
+if(!%config) {
+	die "Could not read config file";
+}
 
 #Paths
-my $sign_dir=$config{pathes}{SIGN_DIR};
-my $cert_dir=$config{pathes}{CERT_DIR};
-my $sendmail=$config{pathes}{SENDMAIL};
-my $openssl =$config{pathes}{PASSWORD};
+my $sign_dir   = $config{SIGN_DIR};
+my $cert_dir   = $config{CERT_DIR};
+my $sendmail   = $config{SENDMAIL};
+my $log_config = $config{LOG_CONFIG};
+my $password   = $config{PASSWORD};
 
 #Error exit codes
 my $E_TEMPFAIL=75;
@@ -30,7 +49,6 @@ my $E_NOMAILADDRESS=71;
 my $E_MISSINGPARAMETERS=89;
 
 #Setup logging service
-my $log_config = $config{pathes}{LOG_CONFIG};
 Log::Log4perl->init($log_config);
 my $logger =  Log::Log4perl->get_logger();
 
@@ -62,7 +80,6 @@ my $cert_file="$cert_dir" . "/" .$from . "_cert.pem";
 my $key_file ="$cert_dir" . "/" .$from . "_key.pem";
 my $key ="";
 my $cert = "";
-my $password ="siehabenpost";
 my $keycerterror = 0;
 if ( -f "$cert_file" and -f "$key_file") {
 	if(open(KEY,"<$key_file")) {
@@ -100,11 +117,8 @@ else {
         $output = join("",@input); 
 }
 
-#open(PIPE,"|$sendmail -f $from -- $to");
 open(PIPE,"|$sendmail @ARGV");
 print PIPE ($output);
 close(PIPE);
-
-
 
 
