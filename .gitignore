@@ -1,2 +1,3 @@
 certs/
 var/
+etc/smtp-signer.conf
