@@ -7,23 +7,8 @@ use Cwd 'abs_path';
 use File::Basename;
 
 
-sub readConfig {
-	my $filename = shift;
-	my %result = ();
-	if(open(CONFFILE,"<$filename")) {
-		while(<CONFFILE>) {
-			my $line = $_;
-			chomp($line);
-			my ($key,$value)=split(/=/,$line);
-			$value =~ s/"//g;
-			$result{$key} = $value;
-		}
-		return %result;
-	}
-	else {
-		return undef;	
-	}
-}
+
+
 
 my $wd = dirname(abs_path($0));
 chdir($wd);
@@ -48,9 +33,12 @@ my $E_UNAVAILABLE=69;
 my $E_NOMAILADDRESS=71;
 my $E_MISSINGPARAMETERS=89;
 
+my $currentState;
+
 #Setup logging service
 Log::Log4perl->init($log_config);
 my $logger =  Log::Log4perl->get_logger();
+
 
 #Check if target dir exists
 if( ! -d $sign_dir ) {
@@ -62,7 +50,6 @@ if( ! -d $sign_dir ) {
 my @input=<STDIN>;
 my $from = "";
 my $to = "";
-$logger->info("Parameters: @ARGV");
 if(scalar(@ARGV) >3) {
 	$from = $ARGV[1];
 	$to = $ARGV[3];
@@ -109,16 +96,39 @@ if(!$keycerterror) {
 	my $smime = Crypt::SMIME->new();
 	$smime->setPrivateKey($key,$cert,$password);
 	my $signed = $smime->sign(join("",@input));
-	$logger->info("Forwarding signed mail from $from to $to with $sendmail");
+	$logger->info("OK: signed from $from to $to");
         $output = $signed;
 }
 else {
-	$logger->error("No certificate found for $from. Sending unsigned.");
+	$logger->info("OK: unsigned from $from to $to");
         $output = join("",@input); 
 }
 
-open(PIPE,"|$sendmail @ARGV");
-print PIPE ($output);
-close(PIPE);
+if(open(PIPE,"|$sendmail @ARGV")) {
+	print PIPE ($output);
+	close(PIPE);
+} else {
+	$logger->error("FAIL: $!");
+}
 
+
+
+sub readConfig {
+	my $filename = shift;
+	my %result = ();
+	if(open(CONFFILE,"<$filename")) {
+		while(<CONFFILE>) {
+			my $line = $_;
+			next if ($line =~ m/\s*#/);
+			chomp($line);
+			my ($key,$value)=split(/=/,$line);
+			$value =~ s/"//g;
+			$result{$key} = $value;
+		}
+		return %result;
+	}
+	else {
+		return undef;	
+	}
+}
 
