@@ -1,3 +1,4 @@
 certs/
 var/
 etc/smtp-signer.conf
+pf-smtp-clients.conf
