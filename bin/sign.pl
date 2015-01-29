@@ -17,7 +17,6 @@ chdir($wd);
 my %config = readConfig("../etc/smtp-signer.conf");
 
 if(!%config) {
-	die "Could not read config file";
 }
 
 #Paths
@@ -26,6 +25,8 @@ my $cert_dir   = $config{CERT_DIR} || "${wd}/../certs";
 my $sendmail   = $config{SENDMAIL};
 my $log_config = $config{LOG_CONFIG};
 my $password   = $config{PASSWORD};
+
+exit 0;
 
 #Error exit codes
 my $E_TEMPFAIL=75;
@@ -128,7 +129,7 @@ sub readConfig {
 		return %result;
 	}
 	else {
-		return undef;	
+                die "Could not open config file";
 	}
 }
 
