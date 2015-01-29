@@ -6,27 +6,20 @@ use Log::Log4perl qw(:easy);
 use Cwd 'abs_path';
 use File::Basename;
 
-
-
-
+my $config_file = $ENV{'SMTP_SIGNER_CONFIG'} || "../etc/smtp-signer.conf";
 
 my $wd = dirname(abs_path($0));
 chdir($wd);
 
 #Initialize config file
-my %config = readConfig("../etc/smtp-signer.conf");
-
-if(!%config) {
-}
+my %config = readConfig($config_file);
 
 #Paths
 my $sign_dir   = $config{SIGN_DIR};
 my $cert_dir   = $config{CERT_DIR} || "${wd}/../certs";
 my $sendmail   = $config{SENDMAIL};
-my $log_config = $config{LOG_CONFIG};
+my $log_config = $config{LOG_CONFIG} || "${wd}/../etc/log4perl.conf";
 my $password   = $config{PASSWORD};
-
-exit 0;
 
 #Error exit codes
 my $E_TEMPFAIL=75;
@@ -40,12 +33,6 @@ my $currentState;
 Log::Log4perl->init($log_config);
 my $logger =  Log::Log4perl->get_logger();
 
-
-#Check if target dir exists
-if( ! -d $sign_dir ) {
-	$logger->error("GURU MEDITADION: $sign_dir does not exist");
-	exit($E_TEMPFAIL);	
-}
 
 
 my @input=<STDIN>;
@@ -66,6 +53,7 @@ else{
 
 my $cert_file="$cert_dir" . "/" .$from . "_cert.pem";
 my $key_file ="$cert_dir" . "/" .$from . "_key.pem";
+
 my $key ="";
 my $cert = "";
 my $keycerterror = 0;
