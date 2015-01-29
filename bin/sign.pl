@@ -22,7 +22,7 @@ if(!%config) {
 
 #Paths
 my $sign_dir   = $config{SIGN_DIR};
-my $cert_dir   = $config{CERT_DIR};
+my $cert_dir   = $config{CERT_DIR} || "${wd}/../certs";
 my $sendmail   = $config{SENDMAIL};
 my $log_config = $config{LOG_CONFIG};
 my $password   = $config{PASSWORD};
