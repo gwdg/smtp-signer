@@ -1,0 +1,8 @@
+From: thedude@example.com
+To: foo@bar.org
+Subject: Test
+
+Hello People,
+This is free software.
+Free as in Whisky!
+
