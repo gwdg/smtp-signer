@@ -1,0 +1,37 @@
+html
+  head
+    link(href='/bootstrap/css/bootstrap.min.css',rel='stylesheet')
+    title Mail Decryptor Tool
+    meta(name='viewport',content='width=device-width,initial-scale=1')
+    script(src='/jquery/jquery.min.js')
+    script(src='/bootstrap/js/bootstrap.min.js')
+  body
+    .container
+      .jumbotron
+        h1 SMIME Mail Decryptor Tool
+        if err
+          div(class='alert alert-danger')
+            span= err
+        form(method='POST')
+          div(class='form-group')
+            label(for='key') Key
+            select(class='form-control',id='key',name='key')
+              each k in keys
+                if key == k 
+                  option(selected)= k
+                else
+                  option= k 
+          p Paste cipher-text in the text box below <b>or</b> upload 
+            button(type='button',class='btn btn-warning btn-lg') file 
+              span(class='glyphicon glyphicon-download-alt',aria-hidden='true')
+          div(class='form-group')
+            label(for='encrypted') Encrypted Data
+            textarea(name="encrypted",style='font-family:monospace;width:100%;height:250px;overflow:autoscroll;')= encrypted
+            br
+            br
+            button(type='button',class='btn btn-primary btn-lg',aria-hidden='',onclick="submit()") DECRYPT 
+              span(class='glyphicon glyphicon-filter',aria-hidden='true') 
+        pre(style='width=100%;height:250px;')= decrypted
+        small Copyright 2015, Author: Daniel Adler dadler1@gwdg.de
+          img(src='img/gwdg.png') 
+   

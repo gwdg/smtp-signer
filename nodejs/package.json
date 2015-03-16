@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "express": "4.*", 
+    "jade": "*",
+    "openssl-wrapper": "*",
+    "coffee-script": "*",
+    "bootstrap": "*",
+    "body-parser": "*",
+    "temp": "*",
+    "underscore": "*",
+    "mailparser": "*",
+    "jquery": "*"
+  }
+}
