@@ -1,0 +1,45 @@
+#!/bin/sh
+PREFIX=`dirname $0`/..
+. "${PREFIX}/etc/smtp-signer.conf"
+
+if [ $# -ne 1 ]; then
+  cat <<EOF
+usage: $0 <file.p12.pem>
+EOF
+  exit 1
+fi
+
+IN_P12=$1
+
+if [ ! -f ${IN_P12} ]; then
+  printf "missing pkcs#12 file '${IN_P12}'.\n"
+  exit 1
+fi
+
+IN_ALL=/tmp/$$_all.pem
+openssl pkcs12 -in "${IN_P12}" -passout "pass:${PASSWORD}" -out "${IN_ALL}"
+
+MAIL_ADDRESSES=`openssl x509 -in "${IN_ALL}" -email -noout`
+
+for NAME in "${MAIL_ADDRESSES}"
+do
+  printf "added cert/key for email ${NAME}\n"
+  OUT_KEY="${PREFIX}/certs/${NAME}_key.pem"
+  OUT_ALL="${PREFIX}/certs/${NAME}_all.pem"
+  OUT_CERT="${PREFIX}/certs/${NAME}_cert.pem"
+  cp "${IN_CERT}" "${OUT_CERT}"
+#  openssl pkcs12 -in "${OUT_P12}" -passin "pass:${PASSWORD}" -passout "pass:${PASSWORD}" -nocerts -out "${OUT_KEY}"
+  cp "${IN_ALL}" "${OUT_ALL}"
+#  openssl pkcs12 -in "${OUT_P12}" -passin "pass:${PASSWORD}" -passout "pass:${PASSWORD}"          -out "${OUT_ALL}"
+
+#  chmod 460 ${OUT_KEY}
+#  chmod 460 ${OUT_CERT}
+#  chmod 460 ${OUT_ALL}
+
+#  chown ${USERNAME}:wheel ${OUT_KEY}
+#  chown ${USERNAME}:wheel ${OUT_CERT}
+#  chown ${USERNAME}:wheel ${OUT_ALL}
+done
+
+#rm "${OUT_ALL}"
+
