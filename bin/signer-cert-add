@@ -39,9 +39,9 @@ do
   openssl pkcs12 -in "${OUT_P12}" -passin "pass:${PASSWORD}" -passout "pass:${PASSWORD}" -nocerts -out "${OUT_KEY}"
   openssl pkcs12 -in "${OUT_P12}" -passin "pass:${PASSWORD}" -passout "pass:${PASSWORD}"          -out "${OUT_ALL}"
 
-  chmod 460 ${OUT_KEY}
-  chmod 460 ${OUT_CERT}
-  chmod 460 ${OUT_ALL}
+  chmod 440 ${OUT_KEY}
+  chmod 440 ${OUT_CERT}
+  chmod 440 ${OUT_ALL}
 
   chown ${USERNAME}:wheel ${OUT_KEY}
   chown ${USERNAME}:wheel ${OUT_CERT}
