@@ -16,7 +16,6 @@ keys = fs.readdirSync(CERT_DIR)
 re = /_all\.pem$/
 keys = _.filter(keys, (x) -> x.match(re) )
 keys = _.map(keys, (x) -> x.replace("_all.pem","") )
-console.dir(keys)
 
 app.get '/', (req,res) ->
   res.render 'index',
@@ -28,27 +27,24 @@ app.post '/', (req,res) ->
   encrypted = req.body.encrypted
   key = req.body.key
   recip = CERT_DIR+"/"+key+"_all.pem"
-  console.log(recip) 
   temp.open 'maildecryptor', (err,info) ->
     fs.write info.fd, 'Content-Type: application/pkcs7-mime; name="smime.p7m"; smime-type=enveloped-data"\n\n' if not encrypted.match(/Content-Type:/)
     fs.write info.fd, encrypted
     fs.close info.fd, (err) ->
-      console.log info.path
       opts =
         decrypt: true, 
-        in: info.path, # '../test/smime.txt',
+        in: info.path, 
         recip: recip, 
         passin: 'pass:'+PASSWORD
       openssl.exec 'smime', opts, (err, buffer) ->
+        console.log "POST key:"+key
         fs.unlinkSync(info.path)
         res.render 'index',
           encrypted: encrypted, 
           decrypted: buffer.toString() if buffer,
           keys: keys,
           key: key,
-          err: err
-        
-# '../cert/dadler1.pem', 
+          err: "Error: Decryption failed, did you choose a wrong key?" if err
 
 server = app.listen 3000, () ->
   host = server.address().address

@@ -8,7 +8,8 @@ html
   body
     .container
       .jumbotron
-        h1 SMIME Mail Decryptor Tool
+        center
+          h2 S/MIME E-mail Decryption Tool
         if err
           div(class='alert alert-danger')
             span= err
@@ -21,17 +22,23 @@ html
                   option(selected)= k
                 else
                   option= k 
-          p Paste cipher-text in the text box below <b>or</b> upload 
+          p Paste cipher-text in the text box below 
+          // <b>or</b> upload 
             button(type='button',class='btn btn-warning btn-lg') file 
               span(class='glyphicon glyphicon-download-alt',aria-hidden='true')
           div(class='form-group')
             label(for='encrypted') Encrypted Data
-            textarea(name="encrypted",style='font-family:monospace;width:100%;height:250px;overflow:autoscroll;')= encrypted
+            textarea(name="encrypted",cols="100",style='font-family:monospace;width:100%;height:250px;overflow:autoscroll;')= encrypted
             br
             br
-            button(type='button',class='btn btn-primary btn-lg',aria-hidden='',onclick="submit()") DECRYPT 
-              span(class='glyphicon glyphicon-filter',aria-hidden='true') 
+            center
+              button(type='button',class='btn btn-primary btn-lg',aria-hidden='',onclick="submit()") DECRYPT 
+                span(class='glyphicon glyphicon-filter',aria-hidden='true') 
         pre(style='width=100%;height:250px;')= decrypted
-        small Copyright 2015, Author: Daniel Adler dadler1@gwdg.de
-          img(src='img/gwdg.png') 
+        hr
+        img(style='float:right;',src='img/GWDG.png') 
+        small Copyright 2015, GWDG, Send feedback, bug-reports and comments to 
+        a(href='mailto:dadler1@gwdg.de') Daniel Adler
+        br
+        br
    

@@ -1,4 +1,4 @@
 #!/bin/sh
-node-supervisor app.coffee
-
+. ../etc/smtp-signer.conf
+sudo -u ${USERNAME} node-supervisor app.coffee
 
