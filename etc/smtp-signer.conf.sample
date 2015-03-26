@@ -1,5 +1,6 @@
-SIGN_DIR=/var/spool/sign
-CERT_DIR=${TOP}/certs
+USERNAME="_signer"
+SIGN_DIR="/var/spool/sign"
+CERT_DIR="/usr/local/src/smtp-signer/certs"
 SENDMAIL="/usr/sbin/sendmail -G -i"
 OPENSSL="/usr/sbin/openssl"
 PASSWORD="some-secret"
