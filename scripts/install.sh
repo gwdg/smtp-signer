@@ -13,7 +13,7 @@ mkdir -p "${CERT_DIR}" && chown -R ${USERNAME}:${USERNAME} "${CERT_DIR}"
 
 # setup base group for SMTP-Signer 'users' (authenticated via SASL and passwd)
 
-groupadd -g 10000 usign
+# groupadd -g 10000 usign
 
 # setup pf-smtp-clients.conf file
 
