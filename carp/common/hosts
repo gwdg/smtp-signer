@@ -1,0 +1,6 @@
+192.168.2.5  store.test store
+192.168.2.10 signer1.test signer1
+192.168.2.11 signer2.test signer2
+192.168.2.20 smtp-signer.test smtp-signer
+192.168.2.30 mailer.test mailer
+
