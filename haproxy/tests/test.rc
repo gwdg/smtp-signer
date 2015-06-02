@@ -1,0 +1,14 @@
+# Copy test.rc.sample to test.rc and setup variables
+# Then, 
+#
+#   . ./test.rc
+#
+# And run other tests.
+#
+
+T_HOST="192.168.3.20"
+T_FROM="Foobar <foobar@example.com>"
+T_TO="Postmaster <postmaster@mailer.test>"
+
+export T_HOST T_FROM T_TO
+

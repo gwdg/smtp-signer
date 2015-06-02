@@ -1,0 +1,5 @@
+192.168.3.10 signer1.test signer1
+192.168.3.11 signer2.test signer2
+192.168.3.20 haproxy.test haproxy
+192.168.3.30 mailer.test  mailer
+
