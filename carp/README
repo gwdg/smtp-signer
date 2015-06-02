@@ -1,4 +1,18 @@
+# SMTP-Signer Vagrant CARP Configuration
 
-smtp-signer 192.168.2.20
-mailer      192.168.2.30
+## Prequisites
+
+- Vagrant
+- Virtualbox
+
+## Getting Started
+
+  vagrant up
+  vagrant reload
+
+## Test
+
+  cd tests
+  . ./test.rc
+  ./mail.py
 

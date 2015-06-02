@@ -9,7 +9,8 @@ ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 
 # -- ntpd
 
-mv /etc/ntpd.conf /etc/ntpd.conf.old
+# pkg_add ntpd
+# mv /etc/ntpd.conf /etc/ntpd.conf.old
 cat <<EOF >/etc/ntpd.conf
 server ntps1.gwdg.de
 server ntps2.gwdg.de

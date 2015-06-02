@@ -1,10 +1,8 @@
 # test.rc
 
-T_HOST="192.168.2.20" # "smtp-signer.test"
+T_HOST="192.168.2.20" 
 T_FROM="Alice <root@signer1.test>"
 T_TO="Support <root@mailer.test>"
 
 export T_HOST T_FROM T_TO
-
-
 

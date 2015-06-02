@@ -1,20 +1,12 @@
 VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box     = "openbsd55" 
-  config.vm.box_url = "https://github.com/jose-lpa/veewee-openbsd/releases/download/v0.5.5/openbsd55.box"
+  config.vm.box     = "obsd56" 
   config.vm.synced_folder ".", "/vagrant", type: "nfs"
-  # config.vm.synced_folder ".", "/vagrant", disabled: true
-    
+  
   config.vm.provider "virtualbox" do |v|
     v.customize ["modifyvm", :id, "--nicpromisc2", 'allow-all']
   end
   
-  #config.vm.define "store" do |node|
-  #  node.vm.network "private_network", ip: "192.168.2.5"
-  #  node.vm.provision "shell", inline: "echo store.test >/etc/myname"
-  #  node.vm.provision "shell", path: "common.sh"
-  #end
-
   config.vm.define "signer1" do |node|
     node.vm.network "private_network", ip: "192.168.2.10"
     node.vm.provision "shell", inline: "echo signer1.test >/etc/myname"
