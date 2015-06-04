@@ -7,7 +7,7 @@ case `uname` in
     done
     ;;
   OpenBSD)
-    pkg_add p5-Log-Log4perl-1.40 p5-Log-Dispatch-2.41p0
+    sudo pkg_add p5-Log-Log4perl-1.40 p5-Log-Dispatch-2.41p0
     curl -L https://cpanmin.us | perl - --sudo App::cpanminus
     PERL_MODS="Crypt::SMIME"
     for m in ${PERL_MODS}; do
