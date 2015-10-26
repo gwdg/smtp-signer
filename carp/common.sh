@@ -26,3 +26,11 @@ EOF
 
 cat /vagrant/common/hosts >>/etc/hosts
 
+# -- pkg
+
+tee -a $HOME/.profile <<EOF
+PKG_PATH=http://ftp.openbsd.org/pub/OpenBSD/5.7/packages/amd64
+export PKG_PATH
+EOF
+
+

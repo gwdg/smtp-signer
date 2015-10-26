@@ -1,15 +1,14 @@
-export PKG_PATH=http://ftp.openbsd.org/pub/OpenBSD/5.6/packages/amd64/
-
 # -- carp
 
-echo "inet 192.168.2.20 255.255.255.0 192.168.2.0 vhid 1 pass foobar carpdev em1" >> /etc/hostname.carp0
+echo "inet 192.168.3.20 255.255.255.0 192.168.3.0 vhid 1 pass foobar carpdev em1" >> /etc/hostname.carp0
 echo "pass on em1 proto carp keep state" >>/etc/pf.conf
 pfctl -f /etc/pf.conf
 
 # -- postfix
 
 # pkg_add postfix-2.12.20140109
-pkg_add postfix-2.12.20140701
+# pkg_add postfix-2.12.20140701
+pkg_add postfix-2.11.4
 
 /usr/local/sbin/postfix-enable
 

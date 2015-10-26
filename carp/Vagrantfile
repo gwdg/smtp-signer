@@ -1,26 +1,27 @@
 VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box     = "obsd56" 
+  config.vm.box     = "obsd57" 
   config.vm.synced_folder ".", "/vagrant", type: "nfs"
+  config.ssh.shell = "ksh"
   
   config.vm.provider "virtualbox" do |v|
     v.customize ["modifyvm", :id, "--nicpromisc2", 'allow-all']
   end
   
   config.vm.define "signer1" do |node|
-    node.vm.network "private_network", ip: "192.168.2.10"
+    node.vm.network "private_network", ip: "192.168.3.10"
     node.vm.provision "shell", inline: "echo signer1.test >/etc/myname"
     node.vm.provision "shell", path: "common.sh"
     node.vm.provision "shell", path: "signer.sh"
   end
   config.vm.define "signer2" do |node|
-    node.vm.network "private_network", ip: "192.168.2.11"
+    node.vm.network "private_network", ip: "192.168.3.11"
     node.vm.provision "shell", inline: "echo signer2.test >/etc/myname"
     node.vm.provision "shell", path: "common.sh"
     node.vm.provision "shell", path: "signer.sh"
   end
   config.vm.define "mailer" do |node|
-    node.vm.network "private_network", ip: "192.168.2.30"
+    node.vm.network "private_network", ip: "192.168.3.30"
     node.vm.provision "shell", inline: "echo mailer.test >/etc/myname"
     node.vm.provision "shell", path: "common.sh"
     node.vm.provision "shell", path: "mailer.sh"
